@@ -68,17 +68,21 @@ const convertDTtoDate = async(dt) => {
 const currentWeatherDOM = async(weatherAry) => {
     const currEl = document.getElementById('current-box')
     const currTitleEl = document.createElement('h3')
+    const currIconEl = document.createElement('img')
     const day = await convertDTtoDate(weatherAry[0].current.dt)
 
     let title = `${weatherAry[1][0].name}  ${day} `
+    let icon = weatherAry[0].current.weather[0].icon
     let temp = `Temp: ${weatherAry[0].current.temp }\xB0F`
     let wind = `Wind: ${weatherAry[0].current.wind_speed} MPH`
     let humidity = `Humidity: ${weatherAry[0].current.humidity} %`
     let uvi = `UVI Index: ${weatherAry[0].current.uvi}`
     weatherDetails = [temp, wind, humidity, uvi]
 
+    currIconEl.src = 'https://openweathermap.org/img/w/' + icon + '.png'
     currTitleEl.textContent = title
     currEl.appendChild(currTitleEl)
+    currEl.appendChild(currIconEl)
     // Write the details to card content 
     weatherDetails.forEach(element => {
         const newDiv = document.createElement('div')
@@ -93,15 +97,22 @@ const writeDaily = async(weatherObj) => {
     for (let index = 0; index < dayEls.length; index++) {
         const element = dayEls[index];
         const data = weatherObj.daily[index]
+        let icon = data.weather[0].icon
         let date = await convertDTtoDate(data.dt)
         let temp = `Temp: ${data.temp.day }\xB0F`
         let wind = `Wind: ${data.wind_speed} MPH`
         let humidity = `Humidity: ${data.humidity} %`
-        let dataAry = [date,temp,wind,humidity]
+        let dataAry = [date,icon,temp,wind,humidity]
         dataAry.forEach(e => {
-            const newDiv = document.createElement('div')
-            newDiv.textContent = e
-            element.appendChild(newDiv)
+            if(e === icon) {
+                const iconEl = document.createElement('img')
+                iconEl.src = 'https://openweathermap.org/img/w/' + icon + '.png'
+                element.appendChild(iconEl)
+            } else {
+                const newDiv = document.createElement('div')
+                newDiv.textContent = e
+                element.appendChild(newDiv)
+            }
         });
     }
 }
@@ -124,6 +135,10 @@ const handleLS = async(cityName) => {
             old.unshift(frmtCityName);
         } else {
             old.unshift(frmtCityName);
+        }
+        // Max length 7 to keep clean
+        if(old.length > 7) {
+            old.pop()
         }
         localStorage.setItem('history', JSON.stringify(old))       
     } else {
