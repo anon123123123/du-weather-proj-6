@@ -1,14 +1,14 @@
-
-// API Fetch function
+// API Fetch handler
 const fetchAPI = async(url) => {
     let resp = await fetch(url).then(response => {
         if(response.ok) {
             return response.json()
         } else {
-            throw new Error('An error has occurred fetching the weather data...');
+            throw new Error(`An error has occurred fetching the weather data... Response ${response.status}`);
           }
     }).catch((error) => {
         console.error(error)
+        alert(error)
         return false
       })
     return resp
@@ -20,28 +20,40 @@ const weatherByCity = async (geoAPIResponse) => {
     const cityLon = geoAPIResponse[0].lon
     const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=minutely,hourly&units=imperial&appid=ebb3b5026d183a7affb567f28627ccce`
     const forecastObj = await fetchAPI(url)
-    return forecastObj
+    if(forecastObj) {
+        const weatherArry = [forecastObj, geoAPIResponse]
+        writeWeatherDom(weatherArry)
+        return
+    } else {
+        alert('Unable to fetch weather data please ensure valid city name')
+        return
+    }
+ 
 }
-// https://javascript.tutorialink.com/how-to-get-data-info-from-openweathermap-api-dt/
 
 // Function to Geocode City
 const geoCode = async(cityName) => {
     const url = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=5&appid=ebb3b5026d183a7affb567f28627ccce'
     const geoAPIResponse = await fetchAPI(url)
-    if(geoAPIResponse) {
-        const weatherObj = await weatherByCity(geoAPIResponse)
-        return [weatherObj, geoAPIResponse]
+    if(geoAPIResponse.length) {
+        handleLS(cityName)
+        weatherByCity(geoAPIResponse)
+        return
+    } else {
+        return
     }
 }
 
 // Function to Validate City 
 const validateCityName = async(cityName) => {
     const regex = new RegExp("^[a-zA-Z',.\s-]{1,25}$");
-    if(regex.test(cityName)) {
-        return cityName
+    let noSpaces = cityName.split(" ").join("")
+    if(regex.test(noSpaces)) {
+        geoCode(cityName)
+        return 
     }
     else {
-        console.warn(`Incorrect format provided ${cityName} is not valid`)
+        alert(`Incorrect format provided ${cityName} is not valid`)
         return
     }
 }
@@ -75,22 +87,96 @@ const currentWeatherDOM = async(weatherAry) => {
     });
 }
 
+// Function to write the 5 day forecast from the API JSON 
+const writeDaily = async(weatherObj) => {
+    let dayEls = document.querySelectorAll('.days')
+    for (let index = 0; index < dayEls.length; index++) {
+        const element = dayEls[index];
+        const data = weatherObj.daily[index]
+        let date = await convertDTtoDate(data.dt)
+        let temp = `Temp: ${data.temp.day }\xB0F`
+        let wind = `Wind: ${data.wind_speed} MPH`
+        let humidity = `Humidity: ${data.humidity} %`
+        let dataAry = [date,temp,wind,humidity]
+        dataAry.forEach(e => {
+            const newDiv = document.createElement('div')
+            newDiv.textContent = e
+            element.appendChild(newDiv)
+        });
+    }
+}
+
 // Main func for write weather object to DOM
 const writeWeatherDom = async(weatherAry) => {
+    clearOldWeatherData()
     currentWeatherDOM(weatherAry)
+    writeDaily(weatherAry[0])
+}
+
+// LocalStorage Handler
+const handleLS = async(cityName) => {
+    // makes first letter of each caps
+    let frmtCityName = cityName.split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')
+    if(localStorage.history) {
+        let old = JSON.parse(localStorage.history)
+        if (old.includes(frmtCityName)) {
+            old = old.filter(item => item !== frmtCityName);
+            old.unshift(frmtCityName);
+        } else {
+            old.unshift(frmtCityName);
+        }
+        localStorage.setItem('history', JSON.stringify(old))       
+    } else {
+        localStorage.setItem('history', JSON.stringify([frmtCityName]))
+    }
+    checkForHistory() 
+}
+// Function to clear old content
+const clearOldWeatherData = async() => {
+    document.getElementById('current-box').innerHTML = ""
+    const dayElems = document.querySelectorAll('.days')
+    dayElems.forEach(element => {
+        element.innerHTML = ""
+    });
+} 
+
+// Main call API and write
+const mainWrite = async(cityName) => {
+    validateCityName(cityName)
 }
 
 // Search form handler
 const searchForm = async(e) => {
     e.preventDefault()
-    const cityName = document.getElementById('city-search').value
-    const isValidName = await validateCityName(cityName)
-    if(isValidName) {
-        let weatherAry = await geoCode(isValidName) // Returns weather obj and geo code in array
-        writeWeatherDom(weatherAry)
-        return
+    const cityName = document.getElementById('city-search').value.toLowerCase()
+    mainWrite(cityName)
+}
+
+// History button click handler
+const historySelected = async(e) => {
+    let cityName = e.target.innerText
+    mainWrite(cityName)
+}
+
+
+// Checks if search history in LS
+const checkForHistory = async() => {
+    const searchListEl = document.getElementById('search-history-list')
+    searchListEl.innerHTML = ""
+    if(localStorage.history) {
+        const historyAry = JSON.parse(localStorage.history)
+        historyAry.forEach(element => {
+            const newLiEl = document.createElement('li')
+            const newBtnEl = document.createElement('button')
+            newBtnEl.textContent = element
+            newBtnEl.classList.add('search-btn')
+            searchListEl.append(newLiEl,newBtnEl)
+            newBtnEl.addEventListener('click', historySelected)
+        });
     }
 }
 
-// Event listener 
+checkForHistory()
+
+// Event listener search form 
 document.getElementById('search-form').addEventListener('submit', searchForm)
