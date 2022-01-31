@@ -1,0 +1,84 @@
+* {
+    outline: .5px red solid;
+    box-sizing: border-box;
+}
+/* Remove default styles */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+/* Header and footer styles */
+.headers {
+    top: 0px;
+    margin: 0;
+    text-align: center;
+    padding: 1rem;
+    background-color: blue;
+}
+
+.footers {
+    background-color: blue;
+    bottom: 0;
+    margin-top: auto;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Main flexbox row */
+.flex-row {
+    display: -webkit-flex;
+    display: flex;
+    width: 100%;
+    /* flex-wrap: wrap; */
+}
+
+/* Classes for Search aside */
+.aside {
+    width: 20%;
+}
+
+.search-box {
+   min-width: 100%;
+}
+.search-btn {
+    min-width: 100%;
+    padding: 1rem;
+}
+
+.search-history {
+    margin-top: 2rem;
+}
+
+/* Classes for weather boxes */
+.daily-forecast-col {
+    min-width: 80%;
+}
+
+.daily-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.days {
+    width: 12rem;
+    height: 18rem;
+    margin-left: 3rem;
+}
+
+/* CSS for unique Ids */
+#current-box {
+    min-width: 70%;
+    height: 20rem;
+}
+
+#city-search {
+    min-width: 100%;
+}

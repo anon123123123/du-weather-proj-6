@@ -1,27 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Forecaster</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Weather Dashboard</title>
 </head>
+
 <body>
-    <header id="header">
-        <hgroup>
-            <h1>Weather Forecast</h1>
-            <h2></h2>
-        </hgroup>
+    <header id="header" class="headers">
+            <h1>Weather Dashboard</h1>
     </header>
-    <aside>
+    <main class="flex-row">
+        <aside class="aside">
+            <section class="search-box">
+                <form action="#">
+                    <h3><label for="city-search">Search for a city:</label></h3>
+                    <input type="text" id="city-search" placeholder="Prague">
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
+                </section>
+                <section class="search-history">
+                   <ul>
+                        <li><button class="search-btn">filler</button></li>
+                        <li><button class="search-btn">filler</button></li>
+                        <li><button class="search-btn">filler</button></li>
+                        <li><button class="search-btn">filler</button></li>
+                    </ul> 
+                </section>
+        </aside>
 
-    </aside>
-    <main>
 
+        <section class="daily-forecast-col">
+            <section class="" id="current-box">
+                Current weather box
+            </section>
+            <section class="daily-row">
+                <section class="days">
+                    day
+                </section>
+                <section class="days">
+                    day
+                </section>
+                <section class="days">
+                    day
+                </section>
+                <section class="days">
+                    day
+                </section>
+                <section class="days">
+                    day
+                </section>
+
+            </section>
+        </section>
     </main>
-    <section id="footer">
-
-    </section>
+    <footer class="footers">
+Footer filler
+    </footer>
     <script src="./assets/js/scripts.js"></script>
 </body>
+
 </html>
