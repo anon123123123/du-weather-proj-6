@@ -55,6 +55,7 @@ body {
 .aside {
     width: 20%;
     margin-right: 2rem;
+    margin-left: 1rem;
 }
 
 .search-box {
@@ -67,13 +68,15 @@ body {
 }
 
 .search-history {
+    border-top: .07rem solid black;
     margin-top: 2rem;
 }
 
 /* Classes for weather boxes */
 .current-weather-cls {
-    border: black .15rem solid;
+    border: black .12rem solid;
     margin-top: 1rem;
+    margin-right: 4rem;
 }
 
 .current-weather-cls div, h3{
@@ -86,7 +89,6 @@ body {
     font-size: 2rem;
     margin-top: 0;
 }
-
 
 .daily-forecast-col {
     min-width: 80%;
@@ -104,10 +106,10 @@ body {
     background-color: rgb(61, 69, 116);
     color: white;
 }
+
 .days div{
     margin-bottom: 1.2rem;
     margin-left: .5rem;
-
 }
 
 .days:first-child{
@@ -121,9 +123,9 @@ body {
 /* Dynamically added UVI classes */
 /* Low is 0-2 - moderate 3-5 high 6-7 v high 8-10 extreme 11+ */
 .low-uvi {
-background-color: rgb(51, 218, 113);
-border-radius: .4rem;
-width: 9rem;
+    background-color: rgb(51, 218, 113);
+    border-radius: .4rem;
+    width: 9rem;
 }
 
 .mod-uvi {
@@ -191,4 +193,29 @@ width: 9rem;
 #five-day {
     font-size: 1.5rem;
     font-weight: bolder;
+}
+
+@media only screen and (max-width: 1280px) {
+    .days {
+        width: 10rem;
+        height: 14rem;
+        margin-left: .5rem;
+        background-color: rgb(61, 69, 116);
+        color: white;
+    }
+}
+
+@media only screen and (max-width: 1045px) {
+    .days:first-child{
+        margin-left: .5rem;
+    }
+
+    .days {
+        width: 10rem;
+        height: 14rem;
+        margin: .5rem;
+        background-color: rgb(61, 69, 116);
+        color: white;
+    }
+
 }
