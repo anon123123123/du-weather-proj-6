@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/style.css">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://api.openweathermap.org; img-src https://openweathermap.org;">
     <title>Weather Dashboard</title>
 </head>
 <body>
@@ -13,23 +14,25 @@
     </header>
     <main class="flex-row">
         <aside class="aside">
+            <!-- Search feature -->
             <section class="search-box">
                 <form action="#" id="search-form">
-                    <h3><label for="city-search">Search for a city:</label></h3>
+                    <h3><label for="city-search" id="city-search-label">Search for a city:</label></h3>
                     <input type="text" id="city-search" placeholder="Prague">
-                    <button type="submit" class="search-btn">Search</button>
+                    <button type="submit" class="search-btn" id="search-btn-id">Search</button>
                 </form>
                 </section>
+                <!-- History  -->
                 <section class="search-history">
                    <ul id="search-history-list">
                     </ul> 
                 </section>
         </aside>
-        <section class="daily-forecast-col">
-            <section class="" id="current-box">
+        <section class="daily-forecast-col hide" id="parent-weather-box">
+            <section class="current-weather-cls" id="current-box">
                 <!-- Current weather box -->
             </section>
-            <p>5 Day Forecast</p>
+            <p id="five-day">5-Day Forecast:</p>
             <section class="daily-row">
                 <section class="days">
                 </section>
@@ -45,7 +48,7 @@
         </section>
     </main>
     <footer class="footers">
-Footer filler
+Weather Forecast
     </footer>
     <script src="./assets/js/scripts.js"></script>
 </body>
